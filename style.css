@@ -1,0 +1,188 @@
+/* Resetting CSS Global Rules */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Header Section Starts Here */
+header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+}
+
+.logo {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: .7rem;
+    padding: 10px 0;
+    width: 100%;
+    grid-column: 1/3;
+    margin-right: 140px;
+}
+
+.logo img {
+    height: 70px;
+}
+
+.logo p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+.theme-mode-btns {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-right: 70px;
+}
+
+.theme-mode-btns i {
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.theme-mode-btns i.dark-mode {
+    display: none;
+    color: rgb(214, 7, 142);
+}
+/* Header Section Ends Here */
+
+/* Input Section Starts Here */
+.input-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0;
+    position: relative;
+}
+
+.input-field input {
+    padding: 10px 5px;
+    font-size: 1.1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 400px;
+    outline-color: rgb(217, 0, 141);
+    transition: all .8s ease-out;
+}
+
+.input-field input:focus-within {
+    width: 500px;
+}
+
+.input-field .search-movie-list-container {
+    background-color: rgb(219, 157, 197);
+    max-height: 399px;
+    width: 490px;
+    padding: 3px 2px;
+    border-radius: 0 0 6px 6px;
+    display: none;
+    overflow: hidden;
+    position: absolute;
+    top: 48px;
+}
+
+.input-field .search-movie-list-container p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    margin: 3px;
+    padding: 2px;
+    background-color: rgb(235, 58, 176);
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.input-field .search-movie-list-container p:hover {
+    background-color: rgb(233, 100, 189);
+}
+/* Input Section Ends Here */
+
+/* Movie Container Starts Here */
+.movie-container {
+    display: none;
+    padding: 40px 70px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.movie-container .movie-details-container {
+    display: flex;
+    column-gap: 20px;
+}
+
+.movie-details-container .movie-image img {
+    height: 600px;
+    border-radius: 10px;
+    border: 2px solid rgb(217, 0, 141);
+}
+
+.movie-details-container .movie-details .movie-heading {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+    font-size: 2rem;
+    color: rgb(214, 7, 142);
+}
+
+.movie-details-container .movie-details .movie-original-name,
+.movie-details-container .movie-details .movie-original-name span {
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+.movie-details-container .movie-details .genres {
+    display: flex;
+    column-gap: 10px;
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+.movie-details-container .movie-details .genres .genres-list {
+    display: flex;
+    column-gap: 10px;
+}
+
+.movie-details-container .movie-details .genres .genres-list li {
+    list-style: none;
+}
+
+.movie-details-container .movie-details .ratings {
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+.movie-details-container .movie-details .description {
+    margin: 20px 0;
+    font-size: 1.1rem;
+    text-align: justify;
+}
+
+.movie-container .cast-details-container {
+    margin: 30px 0;
+}
+
+.movie-container .cast-details-container h1 {
+    font-size: 2.5rem;
+    color: rgb(214, 7, 142);
+}
+
+.cast-details-container .cast-details {
+    display: flex;
+    column-gap: 20px;
+    row-gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0 10px 0;
+}
+
+.cast-details-container .cast-details .cast img {
+    height: 300px;
+    border-radius: 10px;
+    border: 2px solid rgb(214, 7, 142);
+}
+
+.cast-details-container .cast-details .cast p {
+    text-align: center;
+    font-size: 1.1rem;
+}
+/* Movie Container Ends Here */
