@@ -5,34 +5,39 @@ const baseURL = "https://image.tmdb.org/t/p/w500";
 // API Path
 const apiPaths = {
     searchMovie: (query) => `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${API_KEY}`,
-    findGenres: `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`
+    findGenres: `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
+    findCast: (movie_id) => `https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`
 }
 
 const searchInput = document.querySelector('.input-field input');
+const darkModeBtn = document.querySelector('header .theme-mode-btns .dark-mode');
+const lightModeBtn = document.querySelector('header .theme-mode-btns .light-mode');
 const searchMovieListContainer = document.querySelector('.search-movie-list-container');
 const movieContainer = document.querySelector('.movie-container');
+const castContainer = document.querySelector('.movie-container .cast-details-container');
+const castDetailsContainer = document.querySelector('.movie-container .cast-details-container .cast-details');
 
-const findGenres = (genre_ids) => {
+const findGenres = async (genre_ids) => {
     const genres = [];
 
     const res = fetch(apiPaths.findGenres);
     
-    return res
-    .then(res => res.json())
-    .then(res => {
+    try {
+        const res_1 = await res;
+        const res_2 = await res_1.json();
         genre_ids.forEach(genre_id => {
-            for(let obj of res.genres) {
-                if(genre_id == obj.id) {
+            for (let obj of res_2.genres) {
+                if (genre_id == obj.id) {
                     genres.push(obj.name);
                     break;
                 }
             }
         });
         return genres;
-    })
-    .catch(error => {
+    } 
+    catch(error) {
         console.log(error);
-    })
+    }
 };
 
 const clearGenresList = (genresList) => {
@@ -41,9 +46,53 @@ const clearGenresList = (genresList) => {
     });
 };
 
+const clearCastDetailsContainer = (genresList) => {
+    Array.from(castDetailsContainer.children).forEach(children => {
+        children.remove();
+    });
+};
+
+const addCastToCastDetailsContainer = async (movieId) => {
+    clearCastDetailsContainer();
+
+    const res = fetch(apiPaths.findCast(movieId));
+
+    try {
+        const res_1 = await res;
+        const res_2 = await res_1.json();
+        const castDetails = res_2.cast.slice(0,10);
+        
+        if(castDetails.length !== 0) {
+            castContainer.style.display = 'block';
+        } 
+        else {
+            castContainer.style.display = 'none';
+        }
+
+        castDetails.forEach(castObj => {
+            const cast = document.createElement('div');
+            const img = document.createElement('img');
+            const p = document.createElement('p');
+
+            cast.classList.add('cast');
+
+            img.src = castObj.profile_path !== null ? baseURL + castObj.profile_path : "./images/gray background.jpg";
+            img.setAttribute('alt', `${castObj.name} Image`);
+            p.textContent = castObj.name;
+
+            cast.append(img, p);
+
+            castDetailsContainer.appendChild(cast);
+        });
+    }
+    catch(error) {
+        console.log(error);
+    }
+};
+
 const showMovieDetails = (movieObj) => {
     return (e) => {
-        const movieImageURL = baseURL + movieObj.poster_path;
+        const movieImageURL = movieObj.poster_path !== null ? baseURL + movieObj.poster_path : "./images/gray background.jpg";
         const movieName = movieObj.title;
         const releaseYear = "(" + movieObj.release_date.substring(0,4) + ")";
         const originalTitle = movieObj.original_title;
@@ -52,15 +101,13 @@ const showMovieDetails = (movieObj) => {
 
         const movieImageElement = document.querySelector('.movie-details-container .movie-image img');
         const movieNameElement = document.querySelector('.movie-details-container .movie-details .movie-name');
-        const releaseYearElement = document.querySelector('.movie-details-container .movie-details .movie-year');
         const originalTitleElement = document.querySelector('.movie-details-container .movie-details .movie-original-name span');
         const ratingsElement = document.querySelector('.movie-details-container .movie-details .ratings span');
         const movieDescriptionElement = document.querySelector('.movie-details-container .movie-details .description');
         const genresList = document.querySelector('.movie-details-container .movie-details .genres .genres-list');
 
         movieImageElement.src = movieImageURL;
-        movieNameElement.textContent = movieName;
-        releaseYearElement.textContent = releaseYear;
+        movieNameElement.textContent = movieName + " " + releaseYear;
         originalTitleElement.textContent = originalTitle;
         ratingsElement.textContent = ratings;
         movieDescriptionElement.textContent = movieDescription;
@@ -77,6 +124,8 @@ const showMovieDetails = (movieObj) => {
         .catch(error => {
             console.log(error);
         })
+
+        addCastToCastDetailsContainer(movieObj.id);
 
         movieContainer.style.display = "block";
         searchMovieListContainer.style.display = "none";
@@ -123,4 +172,43 @@ const searchMovie = (e) => {
     });
 };
 
+const toggleTheme = (e) => {
+    if(lightModeBtn.style.display !== "none") {
+        darkModeBtn.style.display = "block";
+        lightModeBtn.style.display = "none";
+    }
+    else {
+        darkModeBtn.style.display = "none";
+        lightModeBtn.style.display = "block";
+    }
+
+    if(lightModeBtn.style.display !== "none") {
+        const root = document.documentElement;
+        root.style.setProperty('--body-bg-color', "#fff");
+        root.style.setProperty('--movie-search-bg-color', "#fff");
+        root.style.setProperty('--logo-color', "#000");
+        root.style.setProperty('--secondary-text-color', "#000");
+        root.style.setProperty('--primary-text-color', "#d6078e");
+        root.style.setProperty('--primary-border-color', "#d9008d");
+    }
+    else {
+        const root = document.documentElement;
+        root.style.setProperty('--body-bg-color', "#200E3A");
+        root.style.setProperty('--movie-search-bg-color', "#11235A");
+        root.style.setProperty('--logo-color', "#fff");
+        root.style.setProperty('--secondary-text-color', "#fff");
+        root.style.setProperty('--primary-text-color', "#fc61c6");
+        root.style.setProperty('--primary-border-color', "#ff54c3");
+    }
+};
+
+const hideSearchMovieListContainer = (e) => {
+    setTimeout(() => {
+        searchMovieListContainer.style.display = "none";
+    }, 130);
+}; 
+
 searchInput.addEventListener('input', searchMovie);
+searchInput.addEventListener('focusout', hideSearchMovieListContainer);
+lightModeBtn.addEventListener('click', toggleTheme);
+darkModeBtn.addEventListener('click', toggleTheme);
