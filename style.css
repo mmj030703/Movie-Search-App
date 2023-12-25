@@ -303,6 +303,10 @@ header {
     .cast-details-container .cast-details .cast img {
         height: 200px;
     }
+
+    .cast-details-container .cast-details .cast p {
+        font-size: .9rem;
+    }
     /* Movie Container Ends Here */
 }
 
@@ -338,9 +342,17 @@ header {
     .input-field input:focus-within {
         width: 330px;
     }
+
+    .input-field .search-movie-list-container {
+        width: 325px;
+    }
     /* Input Section Ends Here */
 
     /* Movie Container Starts Here */
+    .movie-container {
+        padding: 10px 10px;
+    }
+
     .movie-details-container .movie-image img {
         height: 400px;
         width: 400px;
@@ -358,16 +370,35 @@ header {
         font-size: 1rem;
     }
 
-    .cast-details-container {
+    .movie-container .cast-details-container {
         margin: 0px 0;
     }
 
     .cast-details-container .cast-details {
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        place-items: center;
     }
 
     .cast-details-container .cast-details .cast img {
-        height: 150px;
+        height: 280px;
+    }
+
+    .cast-details-container .cast-details .cast p {
+        font-size: .8rem;
+    }
+    /* Movie Container Ends Here */
+}
+
+@media screen and (max-width:450px) {
+    /* Movie Container Starts Here */
+    .movie-details-container .movie-details .ratings,
+    .cast-details-container .cast-details {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    }
+
+    .cast-details-container .cast-details .cast img {
+        height: 230px;
     }
     /* Movie Container Ends Here */
 }
@@ -382,13 +413,17 @@ header {
     .input-field input:focus-within {
         width: 240px;
     }
+
+    .input-field .search-movie-list-container {
+        width: 235px;
+    }
+
+    .input-field .search-movie-list-container p {
+        font-size: .8rem;
+    }
     /* Input Section Ends Here */
 
     /* Movie Container Starts Here */
-    .movie-container {
-        padding: 10px 25px;
-    }
-
     .movie-details-container .movie-image img {
         width: 250px;
     }
@@ -403,6 +438,19 @@ header {
     .movie-details-container .movie-details .ratings,
     .movie-details-container .movie-details .description {
         font-size: .8rem;
+    }
+
+    .cast-details-container .cast-details {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .cast-details-container .cast-details {
+        place-items: center;
+    }
+
+    .cast-details-container .cast-details .cast img {
+        height: 300px;
+        width: 220px;
     }
     /* Movie Container Ends Here */
 }
