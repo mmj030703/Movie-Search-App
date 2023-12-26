@@ -6,7 +6,8 @@ const baseURL = "https://image.tmdb.org/t/p/w500";
 const apiPaths = {
     searchMovie: (query) => `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${API_KEY}`,
     findGenres: `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
-    findCast: (movie_id) => `https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`
+    findCast: (movie_id) => `https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${API_KEY}`,
+    findPerson: (person_id) => `https://api.themoviedb.org/3/person/${person_id}?api_key=${API_KEY}`,
 }
 
 const searchInput = document.querySelector('.input-field input');
@@ -55,40 +56,51 @@ const clearCastDetailsContainer = (genresList) => {
 const addCastToCastDetailsContainer = async (movieId) => {
     clearCastDetailsContainer();
 
-    const res = fetch(apiPaths.findCast(movieId));
+    const res = await fetch(apiPaths.findCast(movieId));
 
     try {
         const res_1 = await res;
         const res_2 = await res_1.json();
-        const castDetails = res_2.cast.slice(0,10);
-        
-        if(castDetails.length !== 0) {
+        const castDetails = res_2.cast.slice(0, 10);
+
+        if (castDetails.length !== 0) {
             castContainer.style.display = 'block';
-        } 
-        else {
+        } else {
             castContainer.style.display = 'none';
         }
 
-        castDetails.forEach(castObj => {
+        castDetails.forEach(async (castObj) => {
+            const personDetails = await fetch(apiPaths.findPerson(castObj.id));
+            const personData = await personDetails.json();
+
             const cast = document.createElement('div');
             const img = document.createElement('img');
             const p = document.createElement('p');
+            const additionalInfo = document.createElement('p');
 
             cast.classList.add('cast');
 
-            img.src = castObj.profile_path !== null ? baseURL + castObj.profile_path : "./images/gray background.jpg";
+            img.src =
+                castObj.profile_path !== null
+                    ? baseURL + castObj.profile_path
+                    : './images/gray background.jpg';
             img.setAttribute('alt', `${castObj.name} Image`);
             p.textContent = castObj.name;
 
-            cast.append(img, p);
+            // Display additional information about the cast member
+            additionalInfo.textContent = `Age: ${personData.age || 'N/A'}, 
+                                        Started Acting: ${personData.birthday || 'N/A'},
+                                        Other Movies: ${personData.known_for_department || 'N/A'}`;
+
+            cast.append(img, p, additionalInfo);
 
             castDetailsContainer.appendChild(cast);
         });
-    }
-    catch(error) {
+    } catch (error) {
         console.log(error);
     }
 };
+
 
 const showMovieDetails = (movieObj) => {
     return (e) => {
